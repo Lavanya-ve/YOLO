@@ -17,10 +17,13 @@ def get_dataset():
     nine_digits = [img for img, label in mnist if label==9]
 
     #Use these digits to create custom dataset
-    custom_dataset = ImageDataset(nine_digits)
+    custom_dataset = ImageDataset(nine_digits[:3])
 
     #Dataloader
     training_data = DataLoader(custom_dataset, batch_size=20, shuffle=True)
+
+    # for batch_features, batch_labels in training_data:
+        # print(f"The shape of batch_features is: {batch_features.shape}")
 
     return training_data
 
@@ -28,9 +31,16 @@ def get_dataset():
 def train_model():
     data = get_dataset()
 
-    #Fit this data into model
-    model = SimpleConvNet()
-    predicted_grid_cells = model(data)
+    for batch_features, batch_labels in data:
+
+        #Forward pass for model
+        model = SimpleConvNet()
+        predicted_grid_cells = model(batch_features)
+
+        print(f"Shape of predicted grid cells is: {predicted_grid_cells.shape}")
+
+        #Compare using loss function
+        
 
     #Compare using loss function
 
@@ -38,3 +48,5 @@ def train_model():
 
     #Optimization using adams
 
+if __name__ == "__main__":
+    train_model()
